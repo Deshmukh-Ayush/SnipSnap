@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import realtiveTime from "dayjs/plugin/relativeTime"
 import {filesize} from "filesize"
 import { Video } from '@/types';
+import { Button } from '@/components/ui/button';
 
 dayjs.extend(realtiveTime)
 
@@ -73,15 +74,15 @@ const  VideoCard: React.FC<VideoCardProps> = ({video, onDownload}) => {
 
       return (
         <div
-          className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300"
+          className="group border rounded-lg bg-card text-card-foreground shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <figure className="aspect-video relative">
+          <div className="aspect-video relative overflow-hidden">
             {isHovered ? (
               previewError ? (
-                <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                  <p className="text-red-500">Preview not available</p>
+                <div className="w-full h-full flex items-center justify-center bg-muted">
+                  <p className="text-destructive">Preview not available</p>
                 </div>
               ) : (
                 <video
@@ -100,48 +101,50 @@ const  VideoCard: React.FC<VideoCardProps> = ({video, onDownload}) => {
                 className="w-full h-full object-cover"
               />
             )}
-            <div className="absolute bottom-2 right-2 bg-base-100 bg-opacity-70 px-2 py-1 rounded-lg text-sm flex items-center">
+            <div className="absolute bottom-2 right-2 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-md text-sm flex items-center">
               <Clock size={16} className="mr-1" />
               {formatDuration(video.duration)}
             </div>
-          </figure>
-          <div className="card-body p-4">
-            <h2 className="card-title text-lg font-bold">{video.title}</h2>
-            <p className="text-sm text-base-content opacity-70 mb-4">
-              {video.description}
-            </p>
-            <p className="text-sm text-base-content opacity-70 mb-4">
-              Uploaded {dayjs(video.createdAt).fromNow()}
-            </p>
+          </div>
+          <div className="p-4 space-y-4">
+            <div>
+              <h2 className="text-lg font-semibold leading-none mb-2">{video.title}</h2>
+              <p className="text-sm text-muted-foreground mb-2">
+                {video.description}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Uploaded {dayjs(video.createdAt).fromNow()}
+              </p>
+            </div>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="flex items-center">
                 <FileUp size={18} className="mr-2 text-primary" />
                 <div>
                   <div className="font-semibold">Original</div>
-                  <div>{formatSize(Number(video.originalSize))}</div>
+                  <div className="text-muted-foreground">{formatSize(Number(video.originalSize))}</div>
                 </div>
               </div>
               <div className="flex items-center">
                 <FileDown size={18} className="mr-2 text-secondary" />
                 <div>
                   <div className="font-semibold">Compressed</div>
-                  <div>{formatSize(Number(video.compressedSize))}</div>
+                  <div className="text-muted-foreground">{formatSize(Number(video.compressedSize))}</div>
                 </div>
               </div>
             </div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center pt-2 border-t">
               <div className="text-sm font-semibold">
                 Compression:{" "}
-                <span className="text-accent">{compressionPercentage}%</span>
+                <span className="text-primary">{compressionPercentage}%</span>
               </div>
-              <button
-                className="btn btn-primary btn-sm"
+              <Button
+                size="sm"
                 onClick={() =>
                   onDownload(getFullVideoUrl(video.publicId), video.title)
                 }
               >
                 <Download size={16} />
-              </button>
+              </Button>
             </div>
           </div>
         </div>

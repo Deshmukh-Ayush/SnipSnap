@@ -3,6 +3,8 @@ import React, {useState, useEffect, useCallback} from 'react'
 import axios from 'axios'
 import VideoCard from '@/components/VideoCard'
 import { Video } from '@/types'
+import { Skeleton } from '@/components/ui/skeleton'
+
 function Home() {
     const [videos, setVideos] = useState<Video[]>([])
     const [loading, setLoading] = useState(true)
@@ -41,18 +43,34 @@ function Home() {
     }, []);
 
     if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-8 w-32" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="border rounded-lg overflow-hidden">
+              <Skeleton className="aspect-video w-full" />
+              <div className="p-4 space-y-2">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
     }
 
     if (error) {
-      return <div className="text-red-500">{error}</div>
+      return <div className="text-destructive">{error}</div>
     }
 
     return (
-        <div className="container mx-auto p-4">
-          <h1 className="text-2xl font-bold mb-4">Videos</h1>
+        <div className="space-y-4">
+          <h1 className="text-3xl font-bold">Videos</h1>
           {videos.length === 0 ? (
-            <div className="text-center text-lg text-gray-500">
+            <div className="text-center text-lg text-muted-foreground py-8">
               No videos available
             </div>
           ) : (

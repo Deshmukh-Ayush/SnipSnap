@@ -2,6 +2,13 @@
 
 import React, {useState, useEffect, useRef} from 'react'
 import { CldImage } from 'next-cloudinary';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Progress } from '@/components/ui/progress'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const socialFormats = {
     "Instagram Square (1:1)": { width: 1080, height: 1080, aspectRatio: "1:1" },
@@ -75,56 +82,62 @@ const socialFormats = {
 
 
     return (
-        <div className="container mx-auto p-4 max-w-4xl">
-          <h1 className="text-3xl font-bold mb-6 text-center">
+        <div className="space-y-6 max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold text-center">
             Social Media Image Creator
           </h1>
 
-          <div className="card">
-            <div className="card-body">
-              <h2 className="card-title mb-4">Upload an Image</h2>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Choose an image file</span>
-                </label>
-                <input
+          <Card>
+            <CardHeader>
+              <CardTitle>Upload an Image</CardTitle>
+              <CardDescription>Transform your images for social media platforms</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="image-upload">Choose an image file</Label>
+                <Input
+                  id="image-upload"
                   type="file"
+                  accept="image/*"
                   onChange={handleFileUpload}
-                  className="file-input file-input-bordered file-input-primary w-full"
+                  className="cursor-pointer"
                 />
               </div>
 
               {isUploading && (
-                <div className="mt-4">
-                  <progress className="progress progress-primary w-full"></progress>
+                <div className="space-y-2">
+                  <Progress value={undefined} className="w-full" />
+                  <p className="text-sm text-muted-foreground">Uploading image...</p>
                 </div>
               )}
 
               {uploadedImage && (
-                <div className="mt-6">
-                  <h2 className="card-title mb-4">Select Social Media Format</h2>
-                  <div className="form-control">
-                    <select
-                      className="select select-bordered w-full"
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="format-select">Select Social Media Format</Label>
+                    <Select
                       value={selectedFormat}
-                      onChange={(e) =>
-                        setSelectedFormat(e.target.value as SocialFormat)
-                      }
+                      onValueChange={(value) => setSelectedFormat(value as SocialFormat)}
                     >
-                      {Object.keys(socialFormats).map((format) => (
-                        <option key={format} value={format}>
-                          {format}
-                        </option>
-                      ))}
-                    </select>
+                      <SelectTrigger id="format-select">
+                        <SelectValue placeholder="Select a format" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.keys(socialFormats).map((format) => (
+                          <SelectItem key={format} value={format}>
+                            {format}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  <div className="mt-6 relative">
-                    <h3 className="text-lg font-semibold mb-2">Preview:</h3>
-                    <div className="flex justify-center">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Preview:</h3>
+                    <div className="relative flex justify-center border rounded-lg overflow-hidden bg-muted">
                       {isTransforming && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-base-100 bg-opacity-50 z-10">
-                          <span className="loading loading-spinner loading-lg"></span>
+                        <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-10">
+                          <Skeleton className="w-16 h-16 rounded-full" />
                         </div>
                       )}
                       <CldImage
@@ -142,15 +155,15 @@ const socialFormats = {
                     </div>
                   </div>
 
-                  <div className="card-actions justify-end mt-6">
-                    <button className="btn btn-primary" onClick={handleDownload}>
+                  <div className="flex justify-end">
+                    <Button onClick={handleDownload}>
                       Download for {selectedFormat}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       );
 }

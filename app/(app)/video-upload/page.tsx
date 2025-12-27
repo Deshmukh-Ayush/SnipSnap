@@ -2,6 +2,11 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 function VideoUpload() {
     const [file, setFile] = useState<File | null>(null)
@@ -46,51 +51,60 @@ function VideoUpload() {
 
 
     return (
-        <div className="container mx-auto p-4">
-          <h1 className="text-2xl font-bold mb-4">Upload Video</h1>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="label">
-                <span className="label-text">Title</span>
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="input input-bordered w-full"
-                required
-              />
-            </div>
-            <div>
-              <label className="label">
-                <span className="label-text">Description</span>
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="textarea textarea-bordered w-full"
-              />
-            </div>
-            <div>
-              <label className="label">
-                <span className="label-text">Video File</span>
-              </label>
-              <input
-                type="file"
-                accept="video/*"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className="file-input file-input-bordered w-full"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={isUploading}
-            >
-              {isUploading ? "Uploading..." : "Upload Video"}
-            </button>
-          </form>
+        <div className="space-y-4">
+          <h1 className="text-3xl font-bold">Upload Video</h1>
+          <Card>
+            <CardHeader>
+              <CardTitle>Video Details</CardTitle>
+              <CardDescription>Upload and compress your video file</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Title</Label>
+                  <Input
+                    id="title"
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                    placeholder="Enter video title"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter video description"
+                    rows={4}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="file">Video File</Label>
+                  <Input
+                    id="file"
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    required
+                    className="cursor-pointer"
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Maximum file size: 70 MB
+                  </p>
+                </div>
+                <Button
+                  type="submit"
+                  disabled={isUploading}
+                  className="w-full"
+                >
+                  {isUploading ? "Uploading..." : "Upload Video"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       );
 }
