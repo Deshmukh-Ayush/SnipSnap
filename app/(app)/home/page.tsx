@@ -14,7 +14,7 @@ function Home() {
             if(Array.isArray(response.data)) {
                 setVideos(response.data)
             } else {
-                throw new Error(" Unexpected response format");
+                throw new Error("Unexpected response format");
 
             }
         } catch (error) {
@@ -31,21 +31,21 @@ function Home() {
     }, [fetchVideos])
 
     const handleDownload = useCallback((url: string, title: string) => {
-        () => {
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", `${title}.mp4`);
-            link.setAttribute("target", "_blank");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${title}.mp4`;
+      link.target = "_blank";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }, []);
 
-        }
+    if (loading) {
+    return <div>Loading...</div>
+    }
 
-    }, [])
-
-    if(loading){
-        return <div>Loading...</div>
+    if (error) {
+      return <div className="text-red-500">{error}</div>
     }
 
     return (
