@@ -15,8 +15,25 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "SnipSnap",
-  description: "Video Compressing Platform",
+  title: {
+    default: "SnipSnap - Smart Video Compression",
+    template: "%s | SnipSnap",
+  },
+  description: "Compress your videos intelligently without losing quality. Fast, secure, and easy to use.",
+  twitter: {
+    card: "summary_large_image",
+  },
+  openGraph: {
+    title: "SnipSnap - Smart Video Compression",
+    description: "Compress your videos intelligently without losing quality.",
+    type: "website",
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
